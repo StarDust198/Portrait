@@ -90,10 +90,128 @@
 /*!************************!*\
   !*** ./src/js/main.js ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
+
+window.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+
+  Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
+});
+
+/***/ }),
+
+/***/ "./src/js/modules/calcScroll.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/calcScroll.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function calcScroll() {
+  let div = document.createElement('div');
+  div.style.width = '50px';
+  div.style.height = '50px';
+  div.style.overflowY = 'scroll';
+  div.style.visility = 'hidden';
+  document.body.appendChild(div);
+  let scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+  return scrollWidth;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (calcScroll);
+
+/***/ }),
+
+/***/ "./src/js/modules/modals.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/modals.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _calcScroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./calcScroll */ "./src/js/modules/calcScroll.js");
 
 
+const modals = () => {
+  let modalCounter = 0;
+
+  const showModal = modalSelector => {
+    const modal = document.querySelector(modalSelector);
+
+    if (modalSelector === '.popup-gift') {
+      document.querySelector('.fixed-gift').remove();
+    }
+
+    modalCounter++;
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden";
+    document.body.style.marginRight = `${Object(_calcScroll__WEBPACK_IMPORTED_MODULE_0__["default"])()}px`;
+  };
+
+  const hideModal = modalSelector => {
+    const modal = document.querySelector(modalSelector);
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+    document.body.style.marginRight = `0px`;
+  };
+
+  const modalTimer = setTimeout(() => {
+    if (!modalCounter) {
+      showModal('.popup-consultation', modalTimer);
+    }
+  }, 60000);
+
+  const showModalByScroll = () => {
+    let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+
+    if (window.pageYOffset + document.documentElement.clientHeight + 1 >= scrollHeight && !modalCounter) {
+      showModal('.popup-gift');
+      window.removeEventListener('scroll', showModalByScroll);
+    }
+  };
+
+  window.addEventListener('scroll', showModalByScroll);
+
+  const bindModal = (btnSelector, modalSelector, closeSelector, closeOnOverlay = 'true') => {
+    const modalBtns = document.querySelectorAll(btnSelector),
+          modal = document.querySelector(modalSelector),
+          closeBtn = document.querySelector(closeSelector),
+          windows = document.querySelectorAll('[data-modal]');
+    modalBtns.forEach(item => item.addEventListener('click', e => {
+      if (e.target) {
+        e.preventDefault();
+      }
+
+      windows.forEach(window => {
+        window.style.display = 'none';
+        window.classList.add('animated', 'fadeIn');
+      });
+      showModal(modalSelector);
+    }));
+    modal.addEventListener('click', e => {
+      if (closeOnOverlay && e.target == modal || e.target == closeBtn || e.target == closeBtn.firstElementChild) {
+        windows.forEach(window => window.style.display = 'none');
+        hideModal(modalSelector);
+      }
+    });
+  };
+
+  bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
+  bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
+  bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (modals);
 
 /***/ })
 
