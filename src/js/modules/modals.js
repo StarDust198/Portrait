@@ -25,11 +25,11 @@ const modals = () => {
         document.body.style.marginRight = `0px`;
     };
 
-    const modalTimer = setTimeout(() => {
+/*     const modalTimer = setTimeout(() => {
         if (!modalCounter) {
             showModal('.popup-consultation', modalTimer);
         }
-    }, 60000);
+    }, 60000); */
 
     const showModalByScroll = () => {
         let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
