@@ -1818,6 +1818,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_sliders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/sliders */ "./src/js/modules/sliders.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
+/* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
+
 
 
 
@@ -1830,6 +1832,8 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', 'vertical');
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
   Object(_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
+  Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
+  Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
 });
 
 /***/ }),
@@ -1856,6 +1860,30 @@ function calcScroll() {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (calcScroll);
+
+/***/ }),
+
+/***/ "./src/js/modules/checkTextInputs.js":
+/*!*******************************************!*\
+  !*** ./src/js/modules/checkTextInputs.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const checkTextInputs = selector => {
+  const txtInputs = document.querySelectorAll(selector);
+  txtInputs.forEach(input => {
+    input.addEventListener('keypress', function (e) {
+      if (e.key.match(/[^а-яё 0-9]/ig)) {
+        e.preventDefault();
+      }
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (checkTextInputs);
 
 /***/ }),
 
