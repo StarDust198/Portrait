@@ -1819,6 +1819,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
+/* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
+
 
 
 
@@ -1834,6 +1836,7 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
   Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   Object(_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
+  Object(_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
 });
 
 /***/ }),
@@ -1905,6 +1908,8 @@ const checkTextInputs = selector => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.promise.finally */ "./node_modules/core-js/modules/es.promise.finally.js");
 /* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
 
 
 function forms() {
@@ -1930,15 +1935,6 @@ function forms() {
     designer: 'assets/server.php',
     question: 'assets/question.php'
   };
-
-  const postData = async (url, data) => {
-    let res = await fetch(url, {
-      method: 'POST',
-      body: data
-    });
-    return await res.text();
-  };
-
   upload.forEach(item => {
     item.addEventListener('input', () => {
       let dots;
@@ -1968,7 +1964,7 @@ function forms() {
       const formData = new FormData(form);
       let api;
       form.closest('.popup-design') || form.classList.contains('calc_form') ? api = path.designer : api = path.question;
-      postData(api, formData).then(res => {
+      Object(_services_requests__WEBPACK_IMPORTED_MODULE_1__["postData"])(api, formData).then(res => {
         console.log(res);
         statusImg.setAttribute('src', message.ok);
         textMessage.textContent = message.success;
@@ -2173,6 +2169,57 @@ const modals = () => {
 
 /***/ }),
 
+/***/ "./src/js/modules/showMoreStyles.js":
+/*!******************************************!*\
+  !*** ./src/js/modules/showMoreStyles.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.promise.finally */ "./node_modules/core-js/modules/es.promise.finally.js");
+/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+
+
+const showMoreStyles = (trigger, wrapper) => {
+  const btn = document.querySelector(trigger);
+  btn.addEventListener('click', () => {
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_1__["getResource"])('http://localhost:3000/styles').then(res => {
+      console.log(res);
+      createCards(res);
+    }).catch(() => {
+      console.log('Ошибка');
+    }).finally(() => {
+      btn.remove();
+    });
+  });
+
+  function createCards(response) {
+    response.forEach(({
+      src,
+      title,
+      link
+    }) => {
+      const cardDiv = document.createElement('div');
+      cardDiv.classList.add('animated', 'fadeInDown', 'col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+      cardDiv.innerHTML = `
+                <div class=styles-block>
+                    <img src="${src}" alt>
+                    <h4>"${title}"</h4>
+                    <a href=""${link}"">Подробнее</a>
+                </div>`;
+      document.querySelector(wrapper).appendChild(cardDiv);
+    });
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (showMoreStyles);
+
+/***/ }),
+
 /***/ "./src/js/modules/sliders.js":
 /*!***********************************!*\
   !*** ./src/js/modules/sliders.js ***!
@@ -2248,6 +2295,39 @@ const sliders = (slides, dir, prev, next) => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (sliders);
+
+/***/ }),
+
+/***/ "./src/js/services/requests.js":
+/*!*************************************!*\
+  !*** ./src/js/services/requests.js ***!
+  \*************************************/
+/*! exports provided: postData, getResource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "postData", function() { return postData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getResource", function() { return getResource; });
+const postData = async (url, data) => {
+  let res = await fetch(url, {
+    method: 'POST',
+    body: data
+  });
+  return await res.text();
+};
+
+const getResource = async (url, data) => {
+  let res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+  }
+
+  return await res.json();
+};
+
+
 
 /***/ })
 
