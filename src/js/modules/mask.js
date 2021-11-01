@@ -15,17 +15,34 @@ const mask = (selector) => {
     };
 
     function createMask(event) {
-        let matrix = '+7 (___) ___-__-__',
-            i = 0,
-            def = matrix.replace(/\D/g, ''),
-            val = this.value.replace(/\D/g, '');
+        let matrix = '+7 (___) ___-__-__',                  // создание шаблона
+            i = 0,                                          // создание итератора
+            def = matrix.replace(/\D/g, ''),                // выделение цифр из матрицы, значение поля ввода по ум.
+            val = this.value.replace(/\D/g, '');            // выделение цифр из поля ввода
 
-        if (def.length >= val.length) {
-            val = def;
+        if (def.length >= val.length) {                     // если длина цифр матрицы больше длины цифр поля ввода
+            val = def;                                      // то заменить на значение по умолчанию
         }
 
-        this.value = matrix.replace(/./g, function(a) {
-            return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
+        this.value = matrix.replace(/./g, function(a) {     // приравниваем значение поля воода к шаблону, тестируя
+                                                            // каждый символ шаблона:
+            // return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
+            
+            if (/[_\d]/.test(a) && i < val.length) {       // если подчеркивание или цифры -
+                if (val.charAt(0) != '7' && val.charAt(1) == '7') {
+                    val = val.slice(1);
+                } else if (val.charAt(0) != '7' && val.charAt(1) != '7' && i == 0) {
+                    i++;
+                    return '7';
+                }
+                let b = val.charAt(i);                     // узнаём символ в цифрах поля ввода под номером итератора,
+                i++;                                       // затем итератор увеличивается и                 
+                return b;                                  // возвращаем узнанное значение
+            } else if (i >= val.length) {                  // если итератор больше или равен длине цифр поля ввода
+                return '';                                 // возвращаем пустоту
+            } else {                                       // во всех других случаях
+                return a;                                  // возвращаем тестируемый символ
+            }
         });
 
         if (event.type === 'blur') {
