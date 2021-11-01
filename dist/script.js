@@ -2178,22 +2178,24 @@ const modals = () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.promise.finally */ "./node_modules/core-js/modules/es.promise.finally.js");
-/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
-
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
 
 
 const showMoreStyles = (trigger, wrapper) => {
   const btn = document.querySelector(trigger);
   btn.addEventListener('click', () => {
-    Object(_services_requests__WEBPACK_IMPORTED_MODULE_1__["getResource"])('http://localhost:3000/styles').then(res => {
-      console.log(res);
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_0__["getResource"])('http://localhost:3000/styles').then(res => {
       createCards(res);
-    }).catch(() => {
-      console.log('Ошибка');
-    }).finally(() => {
       btn.remove();
+    }).catch(error => {
+      const errorDiv = document.createElement('div');
+      errorDiv.style.textAlign = 'center';
+      errorDiv.style.marginBottom = '-20px';
+      errorDiv.textContent = `Поизошла ошибка: ${error.message}`;
+      document.querySelector(wrapper).appendChild(errorDiv);
+      setTimeout(() => {
+        errorDiv.remove();
+      }, 3000);
     });
   });
 

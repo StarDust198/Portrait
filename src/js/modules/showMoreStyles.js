@@ -6,12 +6,19 @@ const showMoreStyles = (trigger, wrapper) => {
     btn.addEventListener('click', () => {
         getResource('http://localhost:3000/styles')
             .then(res => {
-                console.log(res);
                 createCards(res);
-            }).catch(() => {
-                console.log('Ошибка');
-            }).finally(() => {
                 btn.remove();
+            }).catch(error => {
+                const errorDiv = document.createElement('div');
+
+                errorDiv.style.textAlign = 'center';
+                errorDiv.style.marginBottom = '-20px';
+                errorDiv.textContent = `Поизошла ошибка: ${error.message}`;
+
+                document.querySelector(wrapper).appendChild(errorDiv);
+                setTimeout(() => {
+                    errorDiv.remove();
+                }, 3000);
             });
     });
 
