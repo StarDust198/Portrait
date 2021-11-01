@@ -1,6 +1,6 @@
 import { postData } from '../services/requests';
 
-function forms() {
+function forms(state) {
     const allForms = document.querySelectorAll('form'),
           upload = document.querySelectorAll('[name ="upload"]');
         //   phoneInputs = document.querySelectorAll('input[name="user_phone"]'),
@@ -23,6 +23,7 @@ function forms() {
 
     const path = {
         designer: 'assets/server.php',
+        // designer: 'assets/question.php',
         question: 'assets/question.php'
     };
 
@@ -31,7 +32,7 @@ function forms() {
             let dots;
             const fileNameArr = item.files[0].name.split('.');
 
-            fileNameArr[0].length > 7 ? dots = '...' : dots = '.';
+            dots = fileNameArr[0].length > 7 ? '...' : '.';
             const name = fileNameArr[0].substring(0, 7) + dots + fileNameArr[1];
 
             item.previousElementSibling.textContent = name;
@@ -62,8 +63,13 @@ function forms() {
 
             const formData = new FormData(form);
             let api;
-            form.closest('.popup-design') || form.classList.contains('calc_form') ?
-            api = path.designer : api = path.question;
+            api = form.closest('.popup-design') || form.classList.contains('calc_form') ?
+            path.designer : path.question;
+            if (form.classList.contains('calc_form')) {
+                for (let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
 
             postData(api, formData)
                 .then(res => {
