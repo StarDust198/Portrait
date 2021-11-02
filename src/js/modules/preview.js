@@ -1,31 +1,33 @@
 const preview = (blockSelector, fileTag) => {
     const blocks = document.querySelectorAll(blockSelector);
 
-    blocks.forEach(block => {
-        block.addEventListener('mouseover', () => {
-            for (let element of block.children) {
-                element.classList.add('animated');
-                if (element.tagName === 'IMG') {
-                    element.classList.add('fadeIn');
-                    let src = element.src.split('.');
-                    element.src = src[0] + fileTag + '.' + src[1];
-                } else if (!element.classList.contains('sizes-hit')) {
-                    element.classList.add('fadeOut');
-                }
-            }
+    const showImg = (block) => {
+        const img = block.querySelector('img');
+        img.classList.add('animated', 'fadeIn');
+        img.src = img.src.slice(0, -4) + fileTag + img.src.slice(-4);
+        block.querySelectorAll('p:not(.sizes-hit)').forEach(p => {
+            p.classList.remove('fadeIn');
+            p.classList.add('animated', 'fadeOut');
+        });      
+    };
+
+    const hideImg = (block) => {
+        const img = block.querySelector('img');
+        img.classList.remove('fadeIn');
+        img.src = img.src.slice(0, -(4 + fileTag.length)) + img.src.slice(-4);
+        block.querySelectorAll('p:not(.sizes-hit)').forEach(p => {
+            p.classList.remove('fadeOut');
+            p.classList.add('fadeIn');
+        });      
+    };
+
+    blocks.forEach(item => {
+        item.addEventListener('mouseover', () => {
+            showImg(item);
         });
-        
-        block.addEventListener('mouseout', () => {
-            for (let element of block.children) {
-                if (element.tagName === 'IMG') {
-                    element.classList.remove('fadeIn');
-                    let src = element.src.split('.');
-                    element.src = src[0].slice(0, -fileTag.length) + '.' + src[1];
-                } else if (!element.classList.contains('sizes-hit')) {
-                    element.classList.remove('fadeOut');
-                    element.classList.add('fadeIn');
-                }
-            }
+
+        item.addEventListener('mouseout', () => {
+            hideImg(item);
         });
     });
 };
