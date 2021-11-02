@@ -3,6 +3,10 @@ const filter = (menuSelector, blockSelector, absentSelector, activeClass) => {
           menuItems = menu.querySelectorAll('li'),
           blocks = document.querySelectorAll(blockSelector),
           absentBlock = document.querySelector(absentSelector);
+
+    blocks.forEach(block => block.classList.add('animated', 'fadeIn'));
+    absentBlock.classList.add('animated', 'fadeIn');
+
     menu.addEventListener('click', function(e) {
         const tgt = e.target;
         
@@ -13,8 +17,7 @@ const filter = (menuSelector, blockSelector, absentSelector, activeClass) => {
                 item == tgt ? item.classList.add(activeClass) : item.classList.remove(activeClass);
             });
             
-            blocks.forEach((block, i) => {
-                block.classList.add('animated', 'fadeIn');
+            blocks.forEach((block, i) => {                
                 if (block.classList.contains(tgt.classList[0])) {
                     block.style.display = 'block';
                     counter++;

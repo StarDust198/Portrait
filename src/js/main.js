@@ -6,6 +6,7 @@ import checkTextInputs from './modules/checkTextInputs';
 import showMoreStyles from './modules/showMoreStyles';
 import calc from './modules/calc';
 import filter from './modules/filter';
+import preview from './modules/preview';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -25,4 +26,6 @@ window.addEventListener('DOMContentLoaded', () => {
     calc('#size', '#material', '#options', '.promocode', '.calc-price', calcState);
 
     filter('.portfolio-menu', '.portfolio-block', '.portfolio-no', 'active');
+
+    preview('.sizes-block', '-1');
 });
