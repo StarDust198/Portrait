@@ -1849,7 +1849,7 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price', calcState);
   Object(_modules_filter__WEBPACK_IMPORTED_MODULE_7__["default"])('.portfolio-menu', '.portfolio-block', '.portfolio-no', 'active');
   Object(_modules_preview__WEBPACK_IMPORTED_MODULE_8__["default"])('.sizes-block', '-1');
-  Object(_modules_accordion__WEBPACK_IMPORTED_MODULE_9__["default"])('.accordion-heading', '.accordion-block');
+  Object(_modules_accordion__WEBPACK_IMPORTED_MODULE_9__["default"])('.accordion-heading');
 });
 
 /***/ }),
@@ -1863,17 +1863,29 @@ window.addEventListener('DOMContentLoaded', () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const accordion = (triggersSelector, itemsSelector) => {
-  const btns = document.querySelectorAll(triggersSelector),
-        blocks = document.querySelectorAll(itemsSelector);
-  blocks.forEach(block => {
-    block.classList.add('animated', 'fadeInDown');
-  });
+const accordion = triggersSelector => {
+  const btns = document.querySelectorAll(triggersSelector);
+
+  const closeBlocks = exclusionBtn => {
+    btns.forEach(btn => {
+      if (btn != exclusionBtn) {
+        btn.classList.remove('active-style');
+        btn.nextElementSibling.classList.remove('active-content');
+        btn.nextElementSibling.style.maxHeight = '0px';
+      }
+    });
+  };
+
   btns.forEach(btn => {
     btn.addEventListener('click', function () {
-      if (!this.classList.contains('active')) {
-        btns.forEach(btn => btn.classList.remove('active', 'active-style'));
-        this.classList.add('active', 'active-style');
+      closeBlocks(btn);
+      this.classList.toggle('active-style');
+      this.nextElementSibling.classList.toggle('active-content');
+
+      if (this.classList.contains('active-style')) {
+        this.nextElementSibling.style.maxHeight = this.nextElementSibling.scrollHeight + 80 + 'px';
+      } else {
+        this.nextElementSibling.style.maxHeight = '0px';
       }
     });
   });

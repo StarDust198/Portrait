@@ -30,5 +30,5 @@ window.addEventListener('DOMContentLoaded', () => {
 
     preview('.sizes-block', '-1');
 
-    accordion('.accordion-heading', '.accordion-block');
+    accordion('.accordion-heading');
 });
