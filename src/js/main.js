@@ -8,6 +8,7 @@ import calc from './modules/calc';
 import filter from './modules/filter';
 import preview from './modules/preview';
 import accordion from './modules/accordion';
+import burger from './modules/burger';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -15,9 +16,12 @@ window.addEventListener('DOMContentLoaded', () => {
     let calcState = {};
     
     modals();
+
     sliders('.feedback-slider-item', '', '.main-prev-btn', '.main-next-btn');
     sliders('.main-slider-item', 'vertical');
+
     forms(calcState);
+
     mask('[name="phone"]');
     checkTextInputs('[name="name"]');
     checkTextInputs('[name="message"]');
@@ -31,4 +35,6 @@ window.addEventListener('DOMContentLoaded', () => {
     preview('.sizes-block', '-1');
 
     accordion('.accordion-heading');
+
+    burger('.burger-menu', '.burger');
 });
