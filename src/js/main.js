@@ -7,6 +7,7 @@ import showMoreStyles from './modules/showMoreStyles';
 import calc from './modules/calc';
 import filter from './modules/filter';
 import preview from './modules/preview';
+import accordion from './modules/accordion';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -28,4 +29,6 @@ window.addEventListener('DOMContentLoaded', () => {
     filter('.portfolio-menu', '.portfolio-block', '.portfolio-no', 'active');
 
     preview('.sizes-block', '-1');
+
+    accordion('.accordion-heading', '.accordion-block');
 });
