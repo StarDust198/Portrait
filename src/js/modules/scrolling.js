@@ -12,27 +12,61 @@ const scrolling = (upSelector) => {
         }
     });
 
-    const element = document.documentElement,
+    // requestAnimationFrame scroll
+    let speed = 0.3;            // smaller number is faster
+
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            let thisTop = document.documentElement.scrollTop,
+                hash = this.hash,
+                toBlock = document.querySelector(hash).getBoundingClientRect().top,
+                start = null;
+
+            requestAnimationFrame(step);
+
+            function step(time) {
+                if (start === null) {
+                    start = time;
+                }
+
+                let progress = time - start,
+                    r = (toBlock < 0 ? Math.max(thisTop - progress/speed, thisTop + toBlock) :
+                        Math.min(thisTop + progress/speed, thisTop + toBlock));
+
+                document.documentElement.scrollTo(0, r);
+
+                if (r != thisTop + toBlock) {
+                    requestAnimationFrame(step);
+                } else {
+                    location.hash = hash;
+                }
+            }
+        });
+    });
+
+
+    // timeout scroll 
+/*     const element = document.documentElement,
           body = document.body;
 
     const calcScroll = (item) => {
         item.addEventListener('click', function(e) {
-            let scrollTop = Math.round(body.scrollTop || element.scrollTop);
+            e.preventDefault();
 
-            if (this.hash !== '') {
-                e.preventDefault();
-                let hashElement = document.querySelector(this.hash),
-                    hashElementTop = 0;
+            let scrollTop = Math.round(body.scrollTop || element.scrollTop),
+                hashElement = document.querySelector(this.hash),
+                hashElementTop = 0;
 
-                while (hashElement.offsetParent) {
-                    hashElementTop += hashElement.offsetTop;
-                    hashElement = hashElement.offsetParent;
-                }
-
-                hashElementTop = Math.round(hashElementTop);
-                console.log(hashElementTop);
-                smoothScroll(scrollTop, hashElementTop, this.hash);
+            while (hashElement.offsetParent) {
+                hashElementTop += hashElement.offsetTop;
+                hashElement = hashElement.offsetParent;
             }
+
+            hashElementTop = Math.round(hashElementTop);
+            console.log(hashElementTop);
+            smoothScroll(scrollTop, hashElementTop, this.hash);
         });
     };
 
@@ -58,9 +92,8 @@ const scrolling = (upSelector) => {
             }
         }, timeInterval);
     };
-
-    console.log(history);
-    links.forEach(link => calcScroll(link));
+    
+    links.forEach(link => calcScroll(link)); */
 };
 
 export default scrolling;
