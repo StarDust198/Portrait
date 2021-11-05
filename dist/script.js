@@ -1825,6 +1825,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_preview__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/preview */ "./src/js/modules/preview.js");
 /* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
 /* harmony import */ var _modules_burger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/burger */ "./src/js/modules/burger.js");
+/* harmony import */ var _modules_scrolling__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/scrolling */ "./src/js/modules/scrolling.js");
+
 
 
 
@@ -1853,6 +1855,7 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_preview__WEBPACK_IMPORTED_MODULE_8__["default"])('.sizes-block', '-1');
   Object(_modules_accordion__WEBPACK_IMPORTED_MODULE_9__["default"])('.accordion-heading');
   Object(_modules_burger__WEBPACK_IMPORTED_MODULE_10__["default"])('.burger-menu', '.burger');
+  Object(_modules_scrolling__WEBPACK_IMPORTED_MODULE_11__["default"])('.pageup');
 });
 
 /***/ }),
@@ -2398,6 +2401,81 @@ const preview = (blockSelector, fileTag) => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (preview);
+
+/***/ }),
+
+/***/ "./src/js/modules/scrolling.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/scrolling.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const scrolling = upSelector => {
+  const upArrow = document.querySelector(upSelector),
+        links = document.querySelectorAll('a[href^="#"]:not([href="#"])');
+  window.addEventListener('scroll', () => {
+    if (document.documentElement.scrollTop > 1650) {
+      upArrow.classList.remove('fadeOut');
+      upArrow.classList.add('animated', 'fadeIn');
+    } else {
+      upArrow.classList.remove('fadeIn');
+      upArrow.classList.add('fadeOut');
+    }
+  });
+  const element = document.documentElement,
+        body = document.body;
+
+  const calcScroll = item => {
+    item.addEventListener('click', function (e) {
+      let scrollTop = Math.round(body.scrollTop || element.scrollTop);
+
+      if (this.hash !== '') {
+        e.preventDefault();
+        let hashElement = document.querySelector(this.hash),
+            hashElementTop = 0;
+
+        while (hashElement.offsetParent) {
+          hashElementTop += hashElement.offsetTop;
+          hashElement = hashElement.offsetParent;
+        }
+
+        hashElementTop = Math.round(hashElementTop);
+        console.log(hashElementTop);
+        smoothScroll(scrollTop, hashElementTop, this.hash);
+      }
+    });
+  };
+
+  const smoothScroll = (from, to, hash) => {
+    let timeInterval = 1,
+        prevScrollTop,
+        speed = to > from ? 30 : -30;
+    let move = setInterval(function () {
+      let scrollTop = Math.round(body.scrollTop || element.scrollTop);
+
+      if (prevScrollTop === scrollTop || to > from && scrollTop >= to || to < from && scrollTop <= to) {
+        clearInterval(move);
+        history.replaceState(history.state, document.title, location.href.replace(/#.*$/g, '') + hash);
+      } else {
+        body.scrollTop += speed;
+        element.scrollTop += speed;
+        prevScrollTop = scrollTop;
+      }
+    }, timeInterval);
+  };
+
+  console.log(history);
+  links.forEach(link => calcScroll(link));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (scrolling);
 
 /***/ }),
 
