@@ -10,6 +10,7 @@ import preview from './modules/preview';
 import accordion from './modules/accordion';
 import burger from './modules/burger';
 import scrolling from './modules/scrolling';
+import drop from './modules/drop';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -40,4 +41,6 @@ window.addEventListener('DOMContentLoaded', () => {
     burger('.burger-menu', '.burger');
 
     scrolling('.pageup');
+
+    drop();
 });
