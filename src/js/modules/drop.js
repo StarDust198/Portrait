@@ -45,6 +45,26 @@ const drop = () => {
             dots = fileNameArr[0].length > 7 ? '...' : '.';
             const name = fileNameArr[0].substring(0, 7) + dots + fileNameArr[1];
             input.previousElementSibling.textContent = name;
+
+            if (input.getAttribute('data-autoupload')) {
+                let btn = input.previousElementSibling.previousElementSibling;
+                const formData = new FormData();
+
+                formData.append('upload', input.files[0]);
+                postData('assets/server.php', formData)
+                    .then(res => {
+                        console.log(res);
+                        btn.textContent = 'Отправлено!';
+                    }).catch(() => {
+                        btn.textContent = 'Ошибка!';
+                    }).finally(() => {
+                        input.value = '';
+                        input.previousElementSibling.textContent = 'Файл не выбран';        
+                        setTimeout(() => {
+                            btn.textContent = 'Загрузить фотографию';  
+                        }, 5000);
+                    });
+            }
         });
     });
 };

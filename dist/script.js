@@ -2044,7 +2044,10 @@ const checkTextInputs = selector => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.promise.finally */ "./node_modules/core-js/modules/es.promise.finally.js");
+/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
 
 
 const drop = () => {
@@ -2088,6 +2091,24 @@ const drop = () => {
       dots = fileNameArr[0].length > 7 ? '...' : '.';
       const name = fileNameArr[0].substring(0, 7) + dots + fileNameArr[1];
       input.previousElementSibling.textContent = name;
+
+      if (input.getAttribute('data-autoupload')) {
+        let btn = input.previousElementSibling.previousElementSibling;
+        const formData = new FormData();
+        formData.append('upload', input.files[0]);
+        Object(_services_requests__WEBPACK_IMPORTED_MODULE_1__["postData"])('assets/server.php', formData).then(res => {
+          console.log(res);
+          btn.textContent = 'Отправлено!';
+        }).catch(() => {
+          btn.textContent = 'Ошибка!';
+        }).finally(() => {
+          input.value = '';
+          input.previousElementSibling.textContent = 'Файл не выбран';
+          setTimeout(() => {
+            btn.textContent = 'Загрузить фотографию';
+          }, 5000);
+        });
+      }
     });
   });
 };
@@ -2188,6 +2209,24 @@ function forms(state) {
       dots = fileNameArr[0].length > 7 ? '...' : '.';
       const name = fileNameArr[0].substring(0, 7) + dots + fileNameArr[1];
       item.previousElementSibling.textContent = name;
+
+      if (item.getAttribute('data-autoupload')) {
+        let btn = item.previousElementSibling.previousElementSibling;
+        const formData = new FormData();
+        formData.append('upload', item.files[0]);
+        Object(_services_requests__WEBPACK_IMPORTED_MODULE_1__["postData"])('assets/server.php', formData).then(res => {
+          console.log(res);
+          btn.textContent = 'Отправлено!';
+        }).catch(() => {
+          btn.textContent = 'Ошибка!';
+        }).finally(() => {
+          item.value = '';
+          item.previousElementSibling.textContent = 'Файл не выбран';
+          setTimeout(() => {
+            btn.textContent = 'Загрузить фотографию';
+          }, 5000);
+        });
+      }
     });
   });
   allForms.forEach(form => {

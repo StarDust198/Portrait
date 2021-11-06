@@ -36,6 +36,26 @@ function forms(state) {
             const name = fileNameArr[0].substring(0, 7) + dots + fileNameArr[1];
 
             item.previousElementSibling.textContent = name;
+
+            if (item.getAttribute('data-autoupload')) {
+                let btn = item.previousElementSibling.previousElementSibling;
+                const formData = new FormData();
+
+                formData.append('upload', item.files[0]);
+                postData('assets/server.php', formData)
+                    .then(res => {
+                        console.log(res);
+                        btn.textContent = 'Отправлено!';
+                    }).catch(() => {
+                        btn.textContent = 'Ошибка!';
+                    }).finally(() => {
+                        item.value = '';
+                        item.previousElementSibling.textContent = 'Файл не выбран';        
+                        setTimeout(() => {
+                            btn.textContent = 'Загрузить фотографию';  
+                        }, 5000);
+                    });
+            }
         });
     });
 
